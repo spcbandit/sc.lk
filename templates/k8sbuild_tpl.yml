@@ -1,0 +1,9 @@
+.k8sbuild_tpl:
+  before_script:
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+  script:
+    - docker build --no-cache --pull -f ${PROJECT_DIR}/Dockerfile.k8s -t ${DOCKER_URL}:${CI_PIPELINE_ID} .
+    - docker push ${DOCKER_URL}:${CI_PIPELINE_ID}
+    - docker rmi ${DOCKER_URL}:${CI_PIPELINE_ID} || true
+  tags:
+  - runner-docker

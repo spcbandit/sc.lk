@@ -1,0 +1,272 @@
+#backend
+stages:
+  - build
+  - test
+  - notify
+  - deploy
+  - deploy_notify
+
+include: 
+  - local: '/templates/build_back_tpl.yml'
+  - local: '/templates/deploy_back_tpl.yml'
+  - local: '/templates/k8sbuild_tpl.yml'
+
+#build
+
+dev:build:
+  stage: build
+  except:
+    changes:
+      - "*.md"
+  image: docker:dind
+  when: manual
+  variables:
+    PROJECT_DOMAIN: dev-back.it.scancity.ru
+    PROJECT_CORS_DOMAIN: dev-front.it.scancity.ru
+    PROJECT_NAME: SCLKBACK
+    PROJECT_DIR: SC.LK
+    DOCKER_URL: ${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_NAME} 
+  extends:
+    - .build_back_tpl
+  only:
+    - develop
+
+main:build:
+  stage: build
+  except:
+    changes:
+      - "*.md"
+  image: docker:dind
+  variables:
+    PROJECT_DOMAIN: test-back.it.scancity.ru
+    PROJECT_CORS_DOMAIN: test-front.it.scancity.ru
+    PROJECT_NAME: SCLKBACK
+    PROJECT_DIR: SC.LK
+    DOCKER_URL: ${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_NAME}
+    ASPNETCORE_ENVIRONMENT: Testing
+    NLOG_CONFIG: nlog.testing.config
+  extends:
+    - .build_back_tpl
+  only:
+    - main
+
+demo:build:
+  stage: build
+  except:
+    changes:
+      - "*.md"
+  image: docker:dind
+  variables:
+    PROJECT_DOMAIN: back.demo.ctsoft-e.ru
+    PROJECT_CORS_DOMAIN: demo.ctsoft-e.ru
+    PROJECT_NAME: SCLKBACK
+    PROJECT_DIR: SC.LK
+    DOCKER_URL: ${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_NAME} 
+    ASPNETCORE_ENVIRONMENT: Staging
+  extends:
+    - .build_back_tpl
+  only:
+    - demo
+
+prod:build:
+  stage: build
+  except:
+    changes:
+      - "*.md"
+  image: docker:dind
+  when: manual
+  variables:
+    PROJECT_DOMAIN: back.ctsoft-e.ru
+    PROJECT_CORS_DOMAIN: ctsoft-e.ru
+    PROJECT_NAME: SCLKBACK
+    PROJECT_DIR: SC.LK
+    DOCKER_URL: ${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_NAME} 
+    ASPNETCORE_ENVIRONMENT: Production
+  extends:
+    - .build_back_tpl
+  only:
+    - prod-release
+
+k8s:build:
+  stage: build
+  except:
+    changes:
+      - "*.md"
+  image: docker:dind
+  variables:
+    PROJECT_NAME: SCLKBACK
+    PROJECT_DIR: SC.LK
+    DOCKER_URL: ${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_NAME}
+  only:
+    refs:
+      - k8prod
+  extends:
+    - .k8sbuild_tpl
+
+### tests
+
+back-test:
+  stage: test
+  image: mcr.microsoft.com/dotnet/sdk:6.0
+  variables:
+    TIME: 10
+    TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+    URL: https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
+    URL2: https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendDocument
+    TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
+    #TEXT: '"Test status: $1%0A%0AProject:+$CI_PROJECT_NAME%0AURL:+$CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID/%0ABranch:+$CI_COMMIT_REF_SLUG"'
+  before_script:
+    - cd SC.LK.Test
+    - dotnet add package JunitXml.TestLogger --version 3.0.114
+  script: 
+    - 'dotnet test --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
+    #- curl -s --max-time $TIME -d "chat_id=$TELEGRAM_CHAT_ID&disable_web_page_preview=1&text=$TEXT" -F filename=..\artifacts\{assembly}-test-result.xml -F upload=@..\artifacts\{assembly}-test-result.xml" $URL > /dev/null
+    ##- 'curl --location --header "PRIVATE-TOKEN: glpat-LNNE8YSDrrbD5xCBksgj" "https://gitlab.scancity.ru/api/v4/projects/53/jobs/10338/trace" -o log.txt'
+    ##- curl -s --max-time $TIME -d "chat_id=$TELEGRAM_CHAT_ID&disable_web_page_preview=1&text=$TEXT" $URL > /dev/null
+    ##- curl -s --max-time $TIME -d "chat_id=$TELEGRAM_CHAT_ID&disable_web_page_preview=1&text=$TEXT" $URL2 > /dev/null -F document=@"log.txt"
+    ##- cd .. && sh ./alert_notify.sh ✅
+  artifacts:
+    when: always
+    paths: 
+     - ./**/*test-result.xml
+    reports:
+      junit: 
+       - ./**/*test-result.xml
+  tags:
+  - runner-docker
+
+### deploy
+
+dev:deploy:
+  stage: deploy
+  image: docker:dind
+  when: manual
+  variables:
+    SSH_URL: ${DEPLOY_SSH_USER}@${DEPLOY_SSH_HOST}
+    SSH_PRIVATE_KEY: ${DEPLOY_PRIVATE_KEY}
+    SSH_PORT: ${DEPLOY_SSH_PORT}
+    DEPLOY_DIR: /tmp/${CI_COMMIT_SHORT_SHA}/
+    PROJECT_NAME: SCLKBACK
+    PROJECT_DIR: SC.LK
+    PROJECT_DOMAIN: dev-back.it.scancity.ru
+    PROJECT_CORS_DOMAIN: dev-front.it.scancity.ru
+  extends:
+    - .deploy_back_tpl
+  only:
+    - develop
+
+main:deploy:
+  stage: deploy
+  needs:
+    - back-test
+  image: docker:dind
+  variables:
+    SSH_URL: ${DEPLOY_SSH_USER}@${DEPLOY_SSH_HOST}
+    SSH_PRIVATE_KEY: ${DEPLOY_PRIVATE_KEY}
+    SSH_PORT: ${DEPLOY_SSH_PORT}
+    DEPLOY_DIR: /tmp/${CI_COMMIT_SHORT_SHA}/
+    PROJECT_NAME: SCLKBACK
+    PROJECT_DIR: SC.LK
+    PROJECT_DOMAIN: test-back.it.scancity.ru
+    PROJECT_CORS_DOMAIN: test-front.it.scancity.ru
+  extends:
+    - .deploy_back_tpl
+  only:
+    - main
+
+main:deploy:notify:
+  stage: deploy_notify
+  only:
+    - main
+  needs:
+    - main:deploy
+  image: docker:dind
+  variables:
+    TIME: 10
+    TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+    URL: https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
+    TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
+    TEXT: '"Deploy status: $CI_PROJECT_NAME URL:+$CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID/ Branch:+$CI_COMMIT_REF_SLUG"'
+  before_script:
+    - apk add --update curl && rm -rf /var/cache/apk/*
+  script:
+    - curl -s --max-time $TIME -d "chat_id=$TELEGRAM_CHAT_ID&disable_web_page_preview=1&text=$TEXT" $URL > /dev/null
+  tags:
+  - runner-docker
+
+demo:deploy:
+  stage: deploy
+  needs:
+    - back-test
+  image: docker:dind
+  variables:
+    SSH_URL: ${DEPLOY_SSH_USER}@${DEPLOY_SSH_HOST}
+    SSH_PRIVATE_KEY: ${DEPLOY_PRIVATE_KEY}
+    SSH_PORT: ${DEPLOY_SSH_PORT}
+    DEPLOY_DIR: /tmp/${CI_COMMIT_SHORT_SHA}/
+    PROJECT_NAME: SCLKBACK
+    PROJECT_DIR: SC.LK
+    PROJECT_DOMAIN: back.demo.ctsoft-e.ru
+    PROJECT_CORS_DOMAIN: demo.ctsoft-e.ru
+  extends:
+    - .deploy_back_tpl
+  only:
+    - demo
+
+demo:deploy:notify:
+  stage: deploy_notify
+  only:
+    - demo
+  needs:
+    - demo:deploy
+  image: docker:dind
+  variables:
+    TIME: 10
+    TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+    URL: https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage
+    TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
+    TEXT: '"Deploy status: $CI_PROJECT_NAME URL:+$CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID/ Branch:+$CI_COMMIT_REF_SLUG"'
+  before_script:
+    - apk add --update curl && rm -rf /var/cache/apk/*
+  script:
+    - curl -s --max-time $TIME -d "chat_id=$TELEGRAM_CHAT_ID&disable_web_page_preview=1&text=$TEXT" $URL > /dev/null
+  tags:
+  - runner-docker
+
+prod:deploy:
+  stage: deploy
+  image: docker:dind
+  when: manual
+  variables:
+    SSH_URL: ${DEPLOY_SSH_USER}@${DEPLOY_SSH_HOST}
+    SSH_PRIVATE_KEY: ${DEPLOY_PRIVATE_KEY}
+    SSH_PORT: ${DEPLOY_SSH_PORT}
+    DEPLOY_DIR: /tmp/${CI_COMMIT_SHORT_SHA}/
+    PROJECT_NAME: SCLKBACK
+    PROJECT_DIR: SC.LK
+    PROJECT_DOMAIN: back.ctsoft-e.ru
+    PROJECT_CORS_DOMAIN: ctsoft-e.ru
+  extends:
+    - .deploy_back_tpl
+  only:
+    - prod-release
+
+## notify
+notify_error:
+  stage: notify
+  image: docker:dind
+  before_script:
+    - apk add --update curl && rm -rf /var/cache/apk/*
+  script:
+    - sh ./alert_notify.sh ❌
+  when: on_failure
+  tags:
+  - runner-docker
+
+## notify
+.slack-notify:
+  stage: notify
+  script:
+    'curl -X POST -H "Content-type: application/json" 
+    --data "{\"text\":\"Тест завершился с ошибкой — test-${VERSION}. \"}"
+    https://hooks.slack.com/services/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'

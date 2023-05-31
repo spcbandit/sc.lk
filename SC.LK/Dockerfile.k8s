@@ -1,0 +1,14 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /app
+COPY . ./
+RUN mkdir -p publish/
+RUN dotnet restore --interactive
+RUN dotnet build --configuration Release
+RUN dotnet publish --configuration Release --output publish/ --verbosity normal
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
+WORKDIR /app
+EXPOSE 80
+COPY --from=build /app/publish .
+COPY --from=build /app/SC.LK/*.txt ./
+ENTRYPOINT ["dotnet", "SC.LK.dll"]

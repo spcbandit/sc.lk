@@ -1,0 +1,13 @@
+.build_back_tpl:
+  before_script:
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+  script:
+    - cat SC.LK/${NLOG_CONFIG} > SC.LK/nlog.config
+    - docker build --no-cache --pull --build-arg ASPNETCORE_ENVIRONMENT=$ASPNETCORE_ENVIRONMENT -f SC.LK/Dockerfile -t ${DOCKER_URL}:${CI_PIPELINE_ID}-back .
+    - echo "$DOCKER_URL"
+    - echo "$ASPNETCORE_ENVIRONMENT"
+    - echo "$CI_COMMIT_REF_NAME"
+    - docker push ${DOCKER_URL}:${CI_PIPELINE_ID}-back
+    - docker rmi ${DOCKER_URL}:${CI_PIPELINE_ID}-back || true
+  tags:
+  - runner-docker

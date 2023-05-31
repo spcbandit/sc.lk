@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AdminNotFound" xml:space="preserve">
+    <value>Администратор не найден!</value>
+  </data>
+    <data name="UpdateNotSuccess" xml:space="preserve">
+    <value>Не удалось обновить информацию!</value>
+  </data>
+    <data name="InnNotFound" xml:space="preserve">
+    <value>Не удалось найти ИНН! Проверьте верность введенных данных.</value>
+  </data>
+    <data name="InnIsUsed" xml:space="preserve">
+    <value>Не удалось зарегистрироваться! Введенный ИНН уже используется!</value>
+  </data>
+    <data name="LoginIsUsed" xml:space="preserve">
+    <value>Не удалось зарегистрироваться! Введенный логин уже используется! Попробуйте восстановить пароль</value>
+  </data>
+    <data name="FailedRegister" xml:space="preserve">
+    <value>Не удалось зарегистрироваться! Попробуйте позже.</value>
+  </data>
+    <data name="FailedCreateConfigurations" xml:space="preserve">
+    <value>Не удалось создать конфигурацию! Попробуйте позже.</value>
+  </data>
+    <data name="FailedDeleteConfigurations" xml:space="preserve">
+    <value>Не удалось удалить конфигурацию! Попробуйте позже.</value>
+  </data>
+    <data name="FailedGetConfiguration" xml:space="preserve">
+    <value>Не удалось получить конфигурацию! Попробуйте позже.</value>
+  </data>
+    <data name="FailedGetConfigurations" xml:space="preserve">
+    <value>Не удалось получить конфигурации! Попробуйте позже.</value>
+  </data>
+    <data name="FailedSaveConfiguration" xml:space="preserve">
+    <value>Не удалось сохранить конфигурацию! Попробуйте позже.</value>
+  </data>
+    <data name="FailedGetContractors" xml:space="preserve">
+    <value>Не удалось получить контрагентов пользовалеля! Попробуйте позже.</value>
+  </data>
+    <data name="FailedCreateDivision" xml:space="preserve">
+    <value>Не удалось создать подразделение! Попробуйте позже.</value>
+  </data>
+    <data name="FailedDeleteDivision" xml:space="preserve">
+    <value>Не удалось удалить подразделение! Попробуйте позже.</value>
+  </data>
+    <data name="FailedGetDivision" xml:space="preserve">
+    <value>Не удалось получить подразделение! Попробуйте позже.</value>
+  </data>
+    <data name="FailedGetDivisions" xml:space="preserve">
+    <value>Не удалось получить подразделениея! Попробуйте позже.</value>
+  </data>
+    <data name="FailedUpdateDivision" xml:space="preserve">
+    <value>Не удалось обновить подразделение! Попробуйте позже.</value>
+  </data>
+    <data name="FailedDeleteTerminal" xml:space="preserve">
+    <value>Не удалось удалить терминал! Попробуйте позже.</value>
+  </data>
+    <data name="FailedGetTerminal" xml:space="preserve">
+    <value>Не удалось получить подразделение! Попробуйте позже.</value>
+  </data>
+    <data name="FailedGetTerminals" xml:space="preserve">
+    <value>Не удалось получить подразделениея! Попробуйте позже.</value>
+  </data>
+    <data name="FailedCreateBillingFace" xml:space="preserve">
+    <value>Не удалось создать билинг лицо! Попробуйте позже.</value>
+  </data>
+    <data name="FailedDeleteBillingFace" xml:space="preserve">
+    <value>Не удалось удалить билинг лицо! Попробуйте позже.</value>
+  </data>
+    <data name="FailedGetBillingFace" xml:space="preserve">
+    <value>Не удалось получить билинг лицо! Попробуйте позже.</value>
+  </data>
+    <data name="FailedGetBillingFaces" xml:space="preserve">
+    <value>Не удалось получить билинг лица! Попробуйте позже.</value>
+  </data>
+    <data name="FailedUpdateBillingFace" xml:space="preserve">
+    <value>Не удалось обновить билинг лицо! Попробуйте позже.</value>
+  </data>
+    <data name="FailedChangeData" xml:space="preserve">
+    <value>Не удалось изменить данные! Попробуйте позже.</value>
+  </data>
+    <data name="FailedGetUserInfo" xml:space="preserve">
+    <value>Не удалось получить информаию о пользователе! Попробуйте позже.</value>
+  </data>
+    <data name="FailedLogin" xml:space="preserve">
+    <value>Не удалось войти! Попробуйте позже.</value>
+  </data>
+    <data name="UserDoesNotExist" xml:space="preserve">
+    <value>Пользователя не существует в базе данных.</value>
+  </data>
+    <data name="FailedCreateTemplate" xml:space="preserve">
+    <value>Не удалось создать шаблон! Попробуйте позже.</value>
+  </data>
+    <data name="FailedDeleteTemplate" xml:space="preserve">
+    <value>Не удалось удалить шаблон! Попробуйте позже.</value>
+  </data>
+    <data name="FailedGetTemplate" xml:space="preserve">
+    <value>Не удалось получить шаблон! Попробуйте позже.</value>
+  </data>
+    <data name="FailedGetTemplates" xml:space="preserve">
+    <value>Не удалось получить шаблоны! Попробуйте позже.</value>
+  </data>
+    <data name="FailedUpdateTemplate" xml:space="preserve">
+    <value>Не удалось обновить шаблон! Попробуйте позже.</value>
+  </data>
+    <data name="FailedCreateUser" xml:space="preserve">
+    <value>Не удалось создать пользователя! Попробуйте позже.</value>
+  </data>
+    <data name="FailedDeleteUser" xml:space="preserve">
+    <value>Не удалось удалить пользователя! Попробуйте позже.</value>
+  </data>
+    <data name="FailedGetUser" xml:space="preserve">
+    <value>Не удалось получить пользователя! Попробуйте позже.</value>
+  </data>
+    <data name="FailedUpdateUser" xml:space="preserve">
+    <value>Не удалось обновить пользователя! Попробуйте позже.</value>
+  </data>
+    <data name="MailIsUsed" xml:space="preserve">
+    <value>Не удалось зарегистрировать пользователя! Эта почта уже используется.</value>
+  </data>
+    <data name="NotEnoughRights" xml:space="preserve">
+    <value>Не удалось зарегистрировать пользователя! Вы не обладаете правами администратора.</value>
+  </data>
+    <data name="NoneConfiguration" xml:space="preserve">
+    <value>{"info":{},"style":{},"forms":{}}</value>
+  </data>
+    <data name="FailedGetBusinessProcess" xml:space="preserve">
+    <value>Не удалось получить бизнес процесс</value>
+  </data>
+    <data name="FailedUpdateBusinessProcess" xml:space="preserve">
+    <value>Не удалось обновить бизнес процесс</value>
+  </data>
+    <data name="CreateAccountEmailNoty" xml:space="preserve">
+    <value>Вас приветствует CTSoft Enterprise! На нашей платформе был создан аккаунт с использованием вашей почты. </value>
+  </data>
+    <data name="FailedAddLicense" xml:space="preserve">
+    <value>Не удалось добавить лицензию</value>
+  </data>
+    <data name="JWT_Audience" xml:space="preserve">
+    <value>SC.LK.BACKEND</value>
+  </data>
+    <data name="JWT_Issuer" xml:space="preserve">
+    <value>SC.LK.CLIENT</value>
+  </data>
+    <data name="JWT_Key" xml:space="preserve">
+    <value>SC.LK.BACKEND.KEY:[akkp1j23j45]1p511l23]</value>
+  </data>
+    <data name="JWT_LifetimeInMinute" xml:space="preserve">
+    <value>1440</value>
+  </data>
+  <data name="FailedDeactivateLicense" xml:space="preserve">
+    <value>Не удалось удалить лицензию</value>
+  </data>
+  <data name="FailedGetLicense" xml:space="preserve">
+    <value>Не удалось получить лицензию</value>
+  </data>
+  <data name="FailedUpdateContractor" xml:space="preserve">
+    <value>Не удалось обновить контрагента</value>
+  </data>
+  <data name="FailedGetContractor" xml:space="preserve">
+    <value>Не удалось получить контрагента</value>
+  </data>
+  <data name="FailedGetAgentsByContragentId" xml:space="preserve">
+    <value>Не удалось получить агентов</value>
+  </data>
+</root>

@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>bb06369c-944c-4b4d-ac2d-77ee1397d899</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <AssemblyVersion></AssemblyVersion>
+    <FileVersion></FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+    <PackageReference Include="NLog.Layouts.GelfLayout" Version="0.1.4925.19645" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.*" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <InternalsVisibleTo Include="$(AssemblyName).Test" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SC.LK.Application\SC.LK.Application.csproj" />
+    <ProjectReference Include="..\SC.LK.Infrastructure.Api\SC.LK.Infrastructure.Api.csproj" />
+    <ProjectReference Include="..\SC.LK.Infrastructure.BackgroundService\SC.LK.Infrastructure.BackgroundService.csproj" />
+    <ProjectReference Include="..\SC.LK.Infrastructure.ConfiguratorDispatcher\SC.LK.Infrastructure.ConfiguratorDispatcher.csproj" />
+    <ProjectReference Include="..\SC.LK.Infrastructure.Database\SC.LK.Infrastructure.Database.csproj" />
+    <ProjectReference Include="..\SC.LK.Infrastructure.ExternalConnector\SC.LK.Infrastructure.ExternalConnector.csproj" />
+    <ProjectReference Include="..\SC.LK.Infrastructure.InternalConnector\SC.LK.Infrastructure.InternalConnector.csproj" />
+    <ProjectReference Include="..\SC.LK.Infrastructure.MailSender\SC.LK.Infrastructure.MailSender.csproj" />
+    <InternalsVisibleTo Include="$(AssemblyName).Test" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <InternalsVisibleTo Include="$(AssemblyName).Test" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <InternalsVisibleTo Include="$(AssemblyName).Test" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <InternalsVisibleTo Include="$(AssemblyName).Test" />
+  </ItemGroup>
+
+</Project>
